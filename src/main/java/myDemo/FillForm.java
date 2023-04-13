@@ -1,9 +1,14 @@
 package myDemo;
 
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.Select;
 
 public class FillForm {
 
@@ -16,35 +21,30 @@ public class FillForm {
 
         //Open form on chrome
         WebDriver driver = new ChromeDriver();
+        //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS); //Implicit_wait
         driver.get("https://form.jotform.com/231013256579354");
 
         //Fill textboxes: First Name - Last Name - Email
-        WebElement firstName = driver.findElement(By.xpath("//input[@id='first_3']"));
-        firstName.sendKeys(name);
+        driver.findElement(By.xpath("//input[@id='first_3']")).sendKeys(name);
 
-        WebElement lastName = driver.findElement(By.xpath("//input[@id='last_3']"));
-        lastName.sendKeys(surName);
+        driver.findElement(By.xpath("//input[@id='last_3']")).sendKeys(surName);
 
-        WebElement email = driver.findElement(By.xpath("//input[@id='input_4']"));
-        email.sendKeys(mail);
+        driver.findElement(By.xpath("//input[@id='input_4']")).sendKeys(mail);
 
         //Fill calendar: Fecha
-        WebElement date = driver.findElement(By.xpath("//input[@id='lite_mode_8']"));
-        date.sendKeys(monthDayYear);
+        driver.findElement(By.xpath("//input[@id='lite_mode_8']")).sendKeys(monthDayYear);
 
         //Fill radio button: Opción
-        WebElement option = driver.findElement(By.xpath("//label[@id='label_input_9_1']"));
-        option.click();
+        driver.findElement(By.xpath("//label[@id='label_input_9_1']")).click();
 
         //Fill dropdown: Escriba una pregunta
-        //WebElement selection = driver.findElement(By.xpath("//select[@id='input_12']"));
-        //selection.click();
+        Select dropQuestion = new Select(driver.findElement(By.xpath("//*[@id=\"input_12\"]")));
+        dropQuestion.selectByIndex(2);//(0): Opción A, (1): Opción B, (2): Opción C
 
         //Fill checkbox: Términos y condiciones
-        //WebElement terms = driver.findElement(By.xpath("//input[@id='userInput']"));
-        //terms.click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));//Explicit_Wait
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[@id()='hobbies-checkbox-1']")));
+        driver.findElement(By.xpath("//label[@id()='hobbies-checkbox-1']")).click();
 
-        WebElement terms = driver.findElement(By.className("iCheck-helper"));
-        terms.click();
     }
 }
