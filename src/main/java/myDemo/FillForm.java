@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class FillForm {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         //Variables
         String name = "Nombre";
         String surName = "Apellido";
@@ -21,8 +21,10 @@ public class FillForm {
 
         //Open form on chrome
         WebDriver driver = new ChromeDriver();
-        //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS); //Implicit_wait
         driver.get("https://form.jotform.com/231013256579354");
+
+        //Frame
+        WebElement frame = driver.findElement(By.xpath("//iframe[@id='customFieldFrame_17']"));
 
         //Fill textboxes: First Name - Last Name - Email
         driver.findElement(By.xpath("//input[@id='first_3']")).sendKeys(name);
@@ -39,12 +41,14 @@ public class FillForm {
 
         //Fill dropdown: Escriba una pregunta
         Select dropQuestion = new Select(driver.findElement(By.xpath("//*[@id=\"input_12\"]")));
-        dropQuestion.selectByIndex(2);//(0): Opción A, (1): Opción B, (2): Opción C
+        dropQuestion.selectByIndex(2);//(1): Opción A, (2): Opción B, (3): Opción C
 
         //Fill checkbox: Términos y condiciones
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));//Explicit_Wait
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[@id()='hobbies-checkbox-1']")));
-        driver.findElement(By.xpath("//label[@id()='hobbies-checkbox-1']")).click();
+        driver.switchTo().frame(frame);
+
+        driver.findElement(By.xpath("//div[@class='icheckbox_minimal']")).click();
+
+        driver.switchTo().defaultContent();
 
     }
 }
